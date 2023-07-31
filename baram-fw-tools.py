@@ -20,10 +20,6 @@ mingw_gcc_file_name = 'tool_mingw_gcc.zip'
 make_file_name = 'tool_make.zip'
 
 
-# setenv("TEST_DIR", value="c://test", user=True)
-# test_dir = os.environ["TEST_DIR"]
-# print(test_dir)
-
 os_arch = platform.architecture()
 
 if os_arch[0] == '64bit':
@@ -84,10 +80,10 @@ with zipfile.ZipFile(mingw_gcc_file_name, 'r') as zip_ref:
 
 cur_path = os.getcwd()
 
-arm_gcc_path = cur_path + "/" + os.listdir(cur_path + "/arm_gcc")[0] + "/bin"
-cmake_path = cur_path + "/" + os.listdir(cur_path + "/cmake")[0] + "/bin"
-make_path = cur_path + "/" + os.listdir(cur_path + "/make")[0] + "/bin"
-mingw_gcc_path = cur_path + "/" + "mingw_gcc/bin"
+arm_gcc_path = cur_path + "\\arm_gcc\\" + os.listdir(cur_path + "\\arm_gcc")[0] + "\\bin"
+cmake_path = cur_path + "\\cmake\\" + os.listdir(cur_path + "\\cmake")[0] + "\\bin"
+make_path = cur_path + "\\make\\" + os.listdir(cur_path + "\\make")[0] + "\\bin"
+mingw_gcc_path = cur_path + "\\mingw_gcc" + "\\bin"
 
 
 
@@ -101,21 +97,21 @@ print("       " + arm_gcc_path)
 
 print("Path - CMAKE")
 if PATH_STR.find(cmake_path) < 0:
-  py_setenv.setenv("PATH", value=cmake_path, append=True, user=True)
+  py_setenv.setenv("PATH", value=cmake_path, append=True, user=True, suppress_echo=True)
   print("     N " + cmake_path)
 else:
   print("       " + cmake_path)
 
 print("Path - MAKE")
 if PATH_STR.find(make_path) < 0:
-  py_setenv.setenv("PATH", value=make_path, append=True, user=True)
+  py_setenv.setenv("PATH", value=make_path, append=True, user=True, suppress_echo=True)
   print("     N " + make_path)
 else:
   print("       " + make_path)
 
 print("Path - MINGW_GCC")
 if PATH_STR.find(mingw_gcc_path) < 0:
-  py_setenv.setenv("PATH", value=mingw_gcc_path, append=True, user=True)
+  py_setenv.setenv("PATH", value=mingw_gcc_path, append=True, user=True, suppress_echo=True)
   print("     N " + mingw_gcc_path)
 else:
   print("       " + mingw_gcc_path)
