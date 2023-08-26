@@ -2,12 +2,13 @@ import os
 import wget
 import platform
 import zipfile
+import tarfile
 import py_setenv
 
 
 print("---------------")
 print("BARAM F/W TOOLS")
-print("2023. 7. 31.")
+print("2023. 8. 26.")
 print("---------------\n")
 
 OS_64BIT = 0
@@ -18,6 +19,7 @@ cmake_file_name = 'tool_cmake.zip'
 arm_gcc_file_name = 'tool_arm_gcc.zip'
 mingw_gcc_file_name = 'tool_mingw_gcc.zip'
 make_file_name = 'tool_make.zip'
+openocd_file_name = 'tool_openocd.tar.gz'
 
 
 os_arch = platform.architecture()
@@ -54,9 +56,16 @@ if os.path.exists(arm_gcc_file_name) == False:
 print('\nDownload - MINGW_GCC')
 mingw_gcc_down_url = ['https://github.com/chcbaram/baram-fw-tools/releases/download/tools/mingw32.zip',
                       'https://github.com/chcbaram/baram-fw-tools/releases/download/tools/mingw32.zip']
-
 if os.path.exists(mingw_gcc_file_name) == False:
   wget.download(mingw_gcc_down_url[OS_BITS], out=mingw_gcc_file_name)
+
+print('\nDownload - OpenOCD') 
+openocd_down_url = ['https://github.com/openocd-org/openocd/releases/download/v0.12.0/openocd-v0.12.0-i686-w64-mingw32.tar.gz',
+                    'https://github.com/openocd-org/openocd/releases/download/v0.12.0/openocd-v0.12.0-i686-w64-mingw32.tar.gz']
+if os.path.exists(openocd_file_name) == False:
+  wget.download(openocd_down_url[OS_BITS], out=openocd_file_name)
+
+
 
 
 print(" ")
@@ -76,7 +85,9 @@ print('Unzip - MINGW_GCC')
 with zipfile.ZipFile(mingw_gcc_file_name, 'r') as zip_ref:
   zip_ref.extractall("mingw_gcc")      
 
-
+print('Unzip - OpenOCD')
+with tarfile.open(openocd_file_name, 'r') as tar_ref:
+  tar_ref.extractall("openocd")   
 
 cur_path = os.getcwd()
 
@@ -84,7 +95,7 @@ arm_gcc_path = cur_path + "\\arm_gcc\\" + os.listdir(cur_path + "\\arm_gcc")[0] 
 cmake_path = cur_path + "\\cmake\\" + os.listdir(cur_path + "\\cmake")[0] + "\\bin"
 make_path = cur_path + "\\make\\" + os.listdir(cur_path + "\\make")[0] + "\\bin"
 mingw_gcc_path = cur_path + "\\mingw_gcc" + "\\bin"
-
+openocd_path = cur_path + "\\openocd" 
 
 
 PATH_STR = py_setenv.get_variable("PATH", user=True)
@@ -116,3 +127,7 @@ if PATH_STR.find(mingw_gcc_path) < 0:
 else:
   print("       " + mingw_gcc_path)
 
+
+print("Path - OpenOCD")
+py_setenv.setenv("OPENOCD_DIR", value=openocd_path, user=True, suppress_echo=True)
+print("       " + openocd_path)
