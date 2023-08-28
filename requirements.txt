@@ -1,2 +1,4 @@
 py_setenv
 wget
+GitPython
+tqdm
