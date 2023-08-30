@@ -4,11 +4,21 @@ import platform
 import zipfile
 import tarfile
 import py_setenv
+import git
+import stat
+import shutil
+import json
+import subprocess
+import sys
+
+from git import RemoteProgress
+from tqdm import tqdm
+from utils import *
 
 
 print("---------------")
 print("BARAM F/W TOOLS")
-print("2023. 8. 26.")
+print("2023. 8. 30.")
 print("---------------\n")
 
 OS_64BIT = 0
@@ -131,3 +141,55 @@ else:
 print("Path - OpenOCD")
 py_setenv.setenv("OPENOCD_DIR", value=openocd_path, user=True, suppress_echo=True)
 print("       " + openocd_path)
+
+
+
+with open('setup.json') as f:
+    json_obj = json.load(f)
+
+for obj in json_obj:  
+  print(obj)
+  for item in json_obj[obj]: 
+    print("    %-10s"%item + " : " + json_obj[obj][item])
+  
+  esp_idf_path = cur_path + "\\esp\\esp-idf-" + json_obj[obj]['branch']
+  esp_idf_git = "https://github.com/espressif/esp-idf.git"
+  esp_idf_ver = json_obj[obj]['branch']
+
+  if json_obj[obj]['install'] != "True":
+    print("Not Install..")
+    continue
+  else:
+    print("Install..")
+
+  if os.path.exists(esp_idf_path) == True:
+    shutil.rmtree(esp_idf_path, onerror=make_dir_writable)
+
+  git.Repo.clone_from(esp_idf_git,
+                      esp_idf_path,
+                      progress= CloneProgress(),
+                      branch=esp_idf_ver, recursive=True,                     
+                      )
+  print(esp_idf_path)
+  os.chdir(esp_idf_path)
+
+  p = subprocess.Popen(["powershell", "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"], stdout=sys.stdout)
+  p.communicate()
+
+  try:
+    os.environ["IDF_PATH"] = cur_path + "\\esp\\esp-idf-" + esp_idf_ver
+    os.environ["IDF_TOOLS_PATH"] = cur_path + "\\esp\\esp-tools-" + esp_idf_ver
+
+    p = subprocess.Popen(["powershell", ".\\install.ps1"], stdout=sys.stdout)
+    p.communicate()
+
+    print("Path - " + json_obj[obj]['idf_env'])
+    py_setenv.setenv(json_obj[obj]['idf_env'], value=os.environ["IDF_PATH"], user=True, suppress_echo=True)
+    print("       " + os.environ["IDF_PATH"])
+
+    print("Path - " + json_obj[obj]['tool_env'])
+    py_setenv.setenv(json_obj[obj]['tool_env'], value=os.environ["IDF_TOOLS_PATH"], user=True, suppress_echo=True)
+    print("       " + os.environ["IDF_TOOLS_PATH"])
+
+  except:
+    print("Error\n")

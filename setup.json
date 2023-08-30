@@ -1,0 +1,10 @@
+{
+  "esp-idf-v5.1":
+  {
+    "install" : "True",
+    "branch"  : "v5.1",
+    "targets" : "esp32 esp32s3",
+    "idf_env" : "IDF_PATH_V5_1",
+    "tool_env": "IDF_TOOLS_PATH_V5_1" 
+  } 
+}
