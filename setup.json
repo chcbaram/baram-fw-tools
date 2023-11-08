@@ -1,10 +1,27 @@
 {
-  "esp-idf-v5.1":
+  "esp-idf":
   {
-    "install" : "True",
-    "branch"  : "v5.1",
-    "targets" : "esp32 esp32s3",
-    "idf_env" : "IDF_PATH_V5_1",
-    "tool_env": "IDF_TOOLS_PATH_V5_1" 
-  } 
+    "esp-idf-v5.1":
+    {
+      "install" : "True",
+      "branch"  : "v5.1",
+      "targets" : "esp32 esp32s3",
+      "idf_env" : "IDF_PATH_V5_1",
+      "tool_env": "IDF_TOOLS_PATH_V5_1" 
+    } 
+  },
+
+  "rp2040":
+  {
+    "pico-sdk":
+    {
+      "install" : "True",
+      "branch"  : "1.5.1"
+    },
+    "pico-extras":
+    {
+      "install" : "True",
+      "branch"  : "sdk-1.5.1"
+    } 
+  }
 }
