@@ -19,7 +19,7 @@ from utils import *
 
 print("---------------")
 print("BARAM F/W TOOLS")
-print("2023. 11. 8.")
+print("2023. 12. 23.")
 print("---------------\n")
 
 OS_64BIT = 0
@@ -135,8 +135,8 @@ def install_ARM_TOOL_CHAIN():
   print("       " + arm_gcc_path)
 
   print("Path - MINGW_GCC")
-  py_setenv.setenv("GCC_TOOLCHAIN_DIR", value=arm_gcc_path, user=True, suppress_echo=True)
-  print("       " + arm_gcc_path)
+  py_setenv.setenv("GCC_TOOLCHAIN_DIR", value=mingw_gcc_path, user=True, suppress_echo=True)
+  print("       " + mingw_gcc_path)
 
 
   print("Path - CMAKE")
